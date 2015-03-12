@@ -19,7 +19,7 @@ class TreeController < ApplicationController
 
       @diff = @repository.index.diff
       #unstaged files, with .gitignore
-      ignore_patterns = [/\/\.git/]
+      ignore_patterns = [/\/\.git/, /tags/]
       File.open("#{@workspace.path}/#{@repo.name}/.gitignore").each_line do |line|
         next if line =~ /^\s*$/
         next if line =~ /\s*#/

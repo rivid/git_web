@@ -13,7 +13,7 @@
     <% # unstaged files %>
     <% @untracked_files.each do |new_file| %>
       <%= check_box_tag "commits[files][]", new_file, true  %>
-      <%= label_tag new_file %>
+      <label><%= new_file %></label>
       <br />
     <% end %>
     <%= text_area_tag "message", "", placeholder: "leave a commit message here"%>
