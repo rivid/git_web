@@ -12,7 +12,7 @@ class Workspace < ActiveRecord::Base
 
   def add_existing_repos
     Dir.glob("#{self.path}/*").select do |dir|
-      Dir.exists?(dir)
+      Dir.exists?(dir) && Dir.exists?("#{dir}/.git")
     end.each do |dir|
       name = dir.split('/').last
       self.repositories.create(name: name)

@@ -1,3 +1,4 @@
+require 'find'
 class TreeController < ApplicationController
   def show
     @workspace = Workspace.find(params[:workspace_id])
@@ -16,11 +17,29 @@ class TreeController < ApplicationController
         @commits.push(commit)
       end
 
-      #require 'byebug'; byebug
       @diff = @repository.index.diff
-      #@dif_files = @diff.each_delta{ |d| puts d.inspect }
       #unstaged files, with .gitignore
-      #@repository.index.entries
+      ignore_patterns = [/\/\.git/]
+      File.open("#{@workspace.path}/#{@repo.name}/.gitignore").each_line do |line|
+        next if line =~ /^\s*$/
+        next if line =~ /\s*#/
+        line = line.chop
+        line.gsub!('*', ".*")
+        line.gsub!('..*', ".*")
+        ignore_patterns << Regexp.new(line)
+      end
+
+      repo_files = Find.find("#{@workspace.path}/#{@repo.name}").select do |file|
+        fname = file.gsub("#{@workspace.path}/#{@repo.name}", '')
+        !Dir.exists?(file) &&
+          !ignore_patterns.map{|regex| !regex.match(fname).nil?}.any?
+      end.map do |fname|
+        fname.gsub("#{@workspace.path}/#{@repo.name}/", '')
+      end
+
+      @untracked_files = repo_files.select do |fname|
+        @repository.index[fname].nil?
+      end
 
     else
       render 'public/404' and return

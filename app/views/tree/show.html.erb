@@ -10,6 +10,12 @@
       <%= label_tag delta.old_file[:path] %>
       <br />
     <% end %>
+    <% # unstaged files %>
+    <% @untracked_files.each do |new_file| %>
+      <%= check_box_tag "commits[files][]", new_file, true  %>
+      <%= label_tag new_file %>
+      <br />
+    <% end %>
     <%= text_area_tag "message", "", placeholder: "leave a commit message here"%>
     <%= submit_tag "submit"%>
   <% end %>

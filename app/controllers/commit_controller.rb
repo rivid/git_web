@@ -23,6 +23,7 @@ class CommitController < ApplicationController
       create_commit_params.each do |file|
         index.add(file)
       end
+      index.write
 
       options = {}
       options[:tree] = index.write_tree(@repository)
@@ -34,6 +35,8 @@ class CommitController < ApplicationController
       options[:update_ref] = 'HEAD'
 
       Rugged::Commit.create(@repository, options)
+      options = { strategy: :force }
+      @repository.checkout_head(options)
       redirect_to workspace_repository_tree_path(@workspace, repo, params[:tree])
     else
       render 'public/404' and return
