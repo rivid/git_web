@@ -1,0 +1,14 @@
+<%= form_for :workspace, method: :post do |f| %>
+  <%= f.label :path, "path to workspace" %>
+  <%= f.text_field :path, placeholder: "/Users/jack/work" %>
+
+  <%= f.submit "Add workspace" %>
+<% end %>
+
+<div id="workspaces">
+  <ul>
+    <% @workspaces.each do |workspace| %>
+      <li><%= link_to workspace.path, workspace_path(workspace) %></li>
+    <% end %>
+  </ul>
+</div>

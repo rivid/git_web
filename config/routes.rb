@@ -1,7 +1,14 @@
 Rails.application.routes.draw do
-  get 'finder/index'
 
-  get 'finder/show'
+  resources :workspaces do
+    resources :repository do
+      get 'tree/*id' => "tree#show"
+      resources :tree do
+      end
+      resources :commit do
+      end
+    end
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

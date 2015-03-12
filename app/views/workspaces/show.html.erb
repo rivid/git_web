@@ -1,0 +1,11 @@
+<h1>Repositories under <%= @workspace.path %></h1>
+
+<div class="repositories">
+  <ul>
+    <% @repositories.each do |repo| %>
+      <li>
+        <%= link_to repo.name, workspace_repository_tree_path(@workspace, repo, 'master') %>
+      </li>
+    <% end %>
+  </ul>
+</div>
