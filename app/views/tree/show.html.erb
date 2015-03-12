@@ -5,12 +5,17 @@
     <div id="branches">
       <%= select_tag("branch_select", options_for_select(@branche_names, params[:id]), {name: "tree"})%>
     </div>
+    <% unless @diff.each_delta.to_a.empty? %>
+      <label>Changes not staged for commit</label><br />
+    <% end %>
     <% @diff.each_delta do |delta| %>
       <%= check_box_tag "commits[files][]", delta.old_file[:path], true, {id: delta.old_file[:oid]} %>
       <%= label_tag delta.old_file[:path] %>
       <br />
     <% end %>
-    <% # unstaged files %>
+    <% unless @untracked_files.empty? %>
+      <label>Untracked files</label><br />
+    <% end %>
     <% @untracked_files.each do |new_file| %>
       <%= check_box_tag "commits[files][]", new_file, true  %>
       <label><%= new_file %></label>
